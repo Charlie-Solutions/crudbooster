@@ -1,5 +1,5 @@
 <?php 
-namespace charlie\crudbooster\helpers;
+namespace charliesolutions\crudbooster\helpers;
 
 class CB extends CRUDBooster  {
 	//This CB class is for alias of CRUDBooster class

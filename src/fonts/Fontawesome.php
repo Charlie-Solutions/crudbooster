@@ -1,5 +1,5 @@
 <?php 
-namespace charlie\crudbooster\fonts;
+namespace charliesolutions\crudbooster\fonts;
 
 class Fontawesome {
 	public static function getIcons() {

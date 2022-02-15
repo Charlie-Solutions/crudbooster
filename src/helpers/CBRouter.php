@@ -1,15 +1,15 @@
 <?php
 
-namespace charlie\crudbooster\helpers;
+namespace charliesolutions\crudbooster\helpers;
 
 
-use charlie\crudbooster\middlewares\CBAuthAPI;
+use charliesolutions\crudbooster\middlewares\CBAuthAPI;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 class CBRouter
 {
-    private static $cb_namespace = '\charlie\crudbooster\controllers';
+    private static $cb_namespace = '\charliesolutions\crudbooster\controllers';
 
     public static function getCBControllerFiles() {
         $controllers = glob(__DIR__.'/../controllers/*.php');
@@ -68,7 +68,7 @@ class CBRouter
 
     private static function userControllerRoute() {
         Route::group([
-            'middleware' => ['web', '\charlie\crudbooster\middlewares\CBBackend'],
+            'middleware' => ['web', '\charliesolutions\crudbooster\middlewares\CBBackend'],
             'prefix' => config('crudbooster.ADMIN_PATH'),
             'namespace' => 'App\Http\Controllers',
         ], function () {
@@ -102,7 +102,7 @@ class CBRouter
 
     private static function cbRoute() {
         Route::group([
-            'middleware' => ['web', '\charlie\crudbooster\middlewares\CBBackend'],
+            'middleware' => ['web', '\charliesolutions\crudbooster\middlewares\CBBackend'],
             'prefix' => config('crudbooster.ADMIN_PATH'),
             'namespace' => static::$cb_namespace,
         ], function () {

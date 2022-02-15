@@ -1,12 +1,12 @@
-<?php namespace charlie\crudbooster;
+<?php namespace charliesolutions\crudbooster;
 
-use charlie\crudbooster\commands\CrudboosterVersionCommand;
-use charlie\crudbooster\commands\Mailqueues;
+use charliesolutions\crudbooster\commands\CrudboosterVersionCommand;
+use charliesolutions\crudbooster\commands\Mailqueues;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use charlie\crudbooster\commands\CrudboosterInstallationCommand;
-use charlie\crudbooster\commands\CrudboosterUpdateCommand;
+use charliesolutions\crudbooster\commands\CrudboosterInstallationCommand;
+use charliesolutions\crudbooster\commands\CrudboosterUpdateCommand;
 use Illuminate\Foundation\AliasLoader;
 use App;
 
@@ -63,8 +63,8 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
         $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
         $loader->alias('Image', 'Intervention\Image\Facades\Image');
-        $loader->alias('CRUDBooster', 'charlie\crudbooster\helpers\CRUDBooster');
-        $loader->alias('CB', 'charlie\crudbooster\helpers\CB');
+        $loader->alias('CRUDBooster', 'charliesolutions\crudbooster\helpers\CRUDBooster');
+        $loader->alias('CB', 'charliesolutions\crudbooster\helpers\CB');
     }
    
     private function registerSingleton()

@@ -1,4 +1,4 @@
-<?php namespace charlie\crudbooster\commands;
+<?php namespace charliesolutions\crudbooster\commands;
 
 use App;
 use Illuminate\Console\Command;

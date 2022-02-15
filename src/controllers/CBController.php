@@ -1,10 +1,10 @@
-<?php namespace charlie\crudbooster\controllers;
+<?php namespace charliesolutions\crudbooster\controllers;
 
 error_reporting(E_ALL ^ E_NOTICE);
 
 
 use CB;
-use charlie\crudbooster\export\DefaultExportXls;
+use charliesolutions\crudbooster\export\DefaultExportXls;
 use CRUDBooster;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;

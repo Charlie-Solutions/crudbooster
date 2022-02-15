@@ -1,10 +1,10 @@
 <?php
 
 
-namespace charlie\crudbooster\controllers;
+namespace charliesolutions\crudbooster\controllers;
 
 
-use charlie\crudbooster\helpers\CB;
+use charliesolutions\crudbooster\helpers\CB;
 use Illuminate\Support\Facades\Cache;
 
 class ApiAuthorizationController extends Controller

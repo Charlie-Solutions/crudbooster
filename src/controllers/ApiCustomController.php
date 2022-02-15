@@ -1,4 +1,4 @@
-<?php namespace charlie\crudbooster\controllers;
+<?php namespace charliesolutions\crudbooster\controllers;
 
 use CRUDbooster;
 use Illuminate\Support\Facades\DB;

@@ -1,7 +1,7 @@
-<?php namespace charlie\crudbooster\commands;
+<?php namespace charliesolutions\crudbooster\commands;
 
 use Cache;
-use charlie\crudbooster\helpers\CRUDBooster;
+use charliesolutions\crudbooster\helpers\CRUDBooster;
 use DB;
 use Illuminate\Console\Command;
 use Request;

@@ -1,6 +1,6 @@
-<?php namespace charlie\crudbooster\controllers;
+<?php namespace charliesolutions\crudbooster\controllers;
 
-use charlie\crudbooster\controllers\Controller;
+use charliesolutions\crudbooster\controllers\Controller;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;

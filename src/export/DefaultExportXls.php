@@ -1,7 +1,7 @@
 <?php
 
 
-namespace charlie\crudbooster\export;
+namespace charliesolutions\crudbooster\export;
 
 
 use Illuminate\Contracts\View\View;

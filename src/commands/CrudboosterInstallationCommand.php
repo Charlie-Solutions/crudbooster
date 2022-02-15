@@ -1,4 +1,4 @@
-<?php namespace charlie\crudbooster\commands;
+<?php namespace charliesolutions\crudbooster\commands;
 
 use App;
 use Cache;
@@ -45,7 +45,7 @@ class CrudboosterInstallationCommand extends Command
             }
 
             $this->info('Publishing crudbooster assets...');
-            $this->call('vendor:publish', ['--provider' => 'charlie\crudbooster\CRUDBoosterServiceProvider']);
+            $this->call('vendor:publish', ['--provider' => 'charliesolutions\crudbooster\CRUDBoosterServiceProvider']);
 
             $this->info('Dumping the autoloaded files and reloading all new files...');
             $composer = $this->findComposer();

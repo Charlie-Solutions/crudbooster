@@ -4,7 +4,7 @@ use Session;
 use Request;
 use DB;
 use CRUDbooster;
-use charlie\crudbooster\controllers\CBController;
+use charliesolutions\crudbooster\controllers\CBController;
 
 class AdminCmsUsersController extends CBController {
 

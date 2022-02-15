@@ -10,7 +10,7 @@
         $morceau = substr($titleofpageComple,19);
     ?>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <meta name='generator' content='CRUDBooster {{ \charlie\crudbooster\commands\CrudboosterVersionCommand::$version }}'/>
+    <meta name='generator' content='CRUDBooster {{ \charliesolutions\crudbooster\commands\CrudboosterVersionCommand::$version }}'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">

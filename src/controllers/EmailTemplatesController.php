@@ -1,10 +1,10 @@
-<?php namespace charlie\crudbooster\controllers;
+<?php namespace charliesolutions\crudbooster\controllers;
 
 use CRUDBooster;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 
-class EmailTemplatesController extends \charlie\crudbooster\controllers\CBController
+class EmailTemplatesController extends \charliesolutions\crudbooster\controllers\CBController
 {
     public function cbInit()
     {

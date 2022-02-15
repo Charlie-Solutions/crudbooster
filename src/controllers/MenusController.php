@@ -1,4 +1,4 @@
-<?php namespace charlie\crudbooster\controllers;
+<?php namespace charliesolutions\crudbooster\controllers;
 
 use CRUDBooster;
 use Illuminate\Support\Facades\Cache;
@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
-use charlie\crudbooster\fonts\Fontawesome;
+use charliesolutions\crudbooster\fonts\Fontawesome;
 
 class MenusController extends CBController
 {

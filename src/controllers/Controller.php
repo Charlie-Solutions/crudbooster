@@ -1,6 +1,6 @@
 <?php
 
-namespace charlie\crudbooster\controllers;
+namespace charliesolutions\crudbooster\controllers;
 
 // use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

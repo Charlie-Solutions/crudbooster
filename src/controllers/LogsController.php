@@ -1,4 +1,4 @@
-<?php namespace charlie\crudbooster\controllers;
+<?php namespace charliesolutions\crudbooster\controllers;
 
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;

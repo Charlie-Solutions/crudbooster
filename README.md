@@ -1,7 +1,7 @@
 # :rocket: CRUDBOOSTER - Laravel CRUD Generator
-[![Latest Stable Version](https://poser.pugx.org/charlie/crudbooster/v/stable)](https://packagist.org/packages/charlie/crudbooster)
-[![Total Downloads](https://poser.pugx.org/charlie/crudbooster/downloads)](https://packagist.org/packages/charlie/crudbooster)
-[![License](https://poser.pugx.org/charlie/crudbooster/license)](https://packagist.org/packages/charlie/crudbooster)
+[![Latest Stable Version](https://poser.pugx.org/charliesolutions/crudbooster/v/stable)](https://packagist.org/packages/charliesolutions/crudbooster)
+[![Total Downloads](https://poser.pugx.org/charliesolutions/crudbooster/downloads)](https://packagist.org/packages/charliesolutions/crudbooster)
+[![License](https://poser.pugx.org/charliesolutions/crudbooster/license)](https://packagist.org/packages/charliesolutions/crudbooster)
 
 > Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
