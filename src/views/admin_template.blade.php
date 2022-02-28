@@ -8,9 +8,11 @@
         // on découpe le titre
         // we cut the title and get the rest
         $morceau = substr($titleofpageComple,19);
+        // get the filiale number
+        $filiale_number = substr($titleofpageComple,55);
     ?>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <meta name='generator' content='CRUDBooster {{ \charliesolutions\crudbooster\commands\CrudboosterVersionCommand::$version }}'/>
+    <meta name='generator' content='CRUDBooster {{ \crocodicstudio\crudbooster\commands\CrudboosterVersionCommand::$version }}'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
@@ -148,7 +150,7 @@
                             }
                             ?>
                             @if(CRUDBooster::myPrivilegeId() == 1 || CRUDBooster::myPrivilegeId() == 2)
-                                <a type="submit" class="btn btn-sm btn-primary" href='{{ url('report-form/'.$id) }}'">Générer un rapport</a>
+                                <a type="submit" class="btn btn-sm btn-primary" href='{{ url('report-form/'.$id) }}'>Générer un rapport</a>
                             @endif
                         @endif
                     @endfor
@@ -219,8 +221,234 @@
                     {!!Session::get('message')!!}
                 </div>
             @endif
+            
+            <!-- if we are in statistic dashboard-->
+            {{--
+            @if($morceau == "statistiques-suivi-materiels-filiale".$filiale_number)
+                <?php 
+                /* 
+                    laravel request for statistic values with fixed divs
+                */
+                    // first column
+                    $nb_materiels = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->select(DB::raw('COUNT(id)'))
+                        ->count();
+                    $nb_materiels_perdus = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_capteurs as capteur','capteur.id','=','charlie_materials_filiale'.$filiale_number.'.id_capteur')
+                        ->select(DB::raw('COUNT(charlie_materials_filiale'.$filiale_number.'.id)'))
+                        ->where('capteur.status','=','Perdu')
+                        ->count();
+                    $request_val_materiels = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_types as type','type.id','=','charlie_materials_filiale'.$filiale_number.'.id_mat')
+                        ->select(DB::raw('IFNULL(SUM(type.prix),0) as total'))
+                        ->first();
+                    $val_materiels = $request_val_materiels->total;
+                    
+                    // second column
+                    $nb_materiels_service = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_capteurs as capteur','capteur.id','=','charlie_materials_filiale'.$filiale_number.'.id_capteur')
+                        ->select(DB::raw('COUNT(charlie_materials_filiale'.$filiale_number.'.id)'))
+                        ->where('capteur.status','=','En service')
+                        ->count();
+                    $request_val_materiels_service = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_types as type','type.id','=','charlie_materials_filiale'.$filiale_number.'.id_mat')
+                        ->join('charlie_capteurs as capteur','capteur.id','=','charlie_materials_filiale'.$filiale_number.'.id_capteur')
+                        ->select(DB::raw('IFNULL(SUM(type.prix),0) as total'))
+                        ->where('capteur.status','=','En service')
+                        ->first();
+                    $val_materiels_service = $request_val_materiels_service->total;
+                    $nb_materiels_inactif = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_capteurs as capteur','capteur.id','=','charlie_materials_filiale'.$filiale_number.'.id_capteur')
+                        ->select(DB::raw('COUNT(charlie_materials_filiale'.$filiale_number.'.id)'))
+                        ->where('capteur.status','=','Inactif')
+                        ->count();
 
+                    // third column
+                    $nb_materiels_dispo = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_capteurs as capteur','capteur.id','=','charlie_materials_filiale'.$filiale_number.'.id_capteur')
+                        ->select(DB::raw('COUNT(charlie_materials_filiale'.$filiale_number.'.id)'))
+                        ->where('capteur.status','=','Disponible')
+                        ->count();
+                    $request_val_materiels_dispo = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_types as type','type.id','=','charlie_materials_filiale'.$filiale_number.'.id_mat')
+                        ->join('charlie_capteurs as capteur','capteur.id','=','charlie_materials_filiale'.$filiale_number.'.id_capteur')
+                        ->select(DB::raw('IFNULL(SUM(type.prix),0) as total'))
+                        ->where('capteur.status','=','Disponible')
+                        ->first();
+                    $val_materiels_dispo = $request_val_materiels_dispo->total;
+                    $nb_materiels_a_controler = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->select(DB::raw('COUNT(id)'))
+                        ->where('status','=','A CONTROLER')
+                        ->count();
 
+                    // fourth column
+                    $nb_materiels_hs = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->select(DB::raw('COUNT(id)'))
+                        ->where('status','=','HS')
+                        ->count();
+                    $request_val_materiels_hs = DB::table('charlie_materials_filiale'.$filiale_number)
+                        ->join('charlie_types as type','type.id','=','charlie_materials_filiale'.$filiale_number.'.id_mat')
+                        ->select(DB::raw('IFNULL(SUM(type.prix),0) as total'))
+                        ->where('charlie_materials_filiale'.$filiale_number.'.status','=','HS')
+                        ->first();
+                    $val_materiels_hs = $request_val_materiels_hs->total;
+
+                ?>
+                <div class="statistic-row row">
+                    <div id="area1" class="col-sm-3 connectedSortable">
+            
+                        <div id="43e00d5803da67a47582e43f182fc467" class="border-box">
+                            <div class="small-box bg-teal">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels }}</h3>
+                                    <p>Total matériels</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-gear-a"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="82679302ef886950a7ab0c1387511c3b" class="border-box">
+                            <div class="small-box bg-green	">
+                                <div class="inner inner-box">
+                                    <h3>{{ $val_materiels }}</h3>
+                                    <p>Valeur matériel</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-social-euro	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                    
+                            <div class="action pull-right">
+                                <a href="javascript:void(0)" data-componentid="82679302ef886950a7ab0c1387511c3b" data-name="Small Box" class="btn-edit-component"><i class="fa fa-pencil"></i></a>
+                                &nbsp;
+                                <a href="javascript:void(0)" data-componentid="82679302ef886950a7ab0c1387511c3b" class="btn-delete-component"><i class="fa fa-trash"></i></a>
+                            </div>
+                        </div>
+                        <div id="cc12b4af41c01274f9ba4bda04c15ae8" class="border-box">
+                            <div class="small-box bg-aqua	">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels_perdus }}</h3>
+                                    <p>Matériel perdu</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-ios-timer	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="area2" class="col-sm-3 connectedSortable">
+            
+                        <div id="a394c9bbd167f16b0899b5a25c3476b4" class="border-box">
+                            <div class="small-box bg-green	">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels_service }}</h3>
+                                    <p>Total matériels en service</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-android-checkmark-circle	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}?q=EN+SERVICE	" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="67e92d9a31681731cfd3cfb6771e743c" class="border-box">
+                            <div class="small-box bg-teal">
+                                <div class="inner inner-box">
+                                    <h3>{{ $val_materiels_service }}</h3>
+                                    <p>Valeur matériel en service</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-social-euro	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="cca655ebc1776e9dad77845c0ef6176b" class="border-box">
+                            <div class="small-box bg-yellow	">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels_inactif }}</h3>
+                                    <p>Matériel inactif</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-ios-timer	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="area3" class="col-sm-3 connectedSortable">
+            
+                        <div id="74f3378da234725f8754bbbbdfbba79d" class="border-box">
+                            <div class="small-box bg-teal	">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels_dispo }}</h3>
+                                    <p>Matériel disponible</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-android-checkmark-circle	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="9754cb31b0c32681553956140455075e" class="border-box">
+                            <div class="small-box bg-teal">
+                                <div class="inner inner-box">
+                                    <h3>{{ $val_materiels_dispo }}</h3>
+                                    <p>Valeur matériel disponible</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-social-euro	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}_is	" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="8fbdb26722e6c395bdfe5b14d488bcb0" class="border-box">
+                            <div class="small-box bg-red">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels_a_controler }}</h3>
+                                    <p>Matériel à contrôler</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-ios-timer	"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="area4" class="col-sm-3 connectedSortable">
+            
+                        <div id="98e757071dec58e524c1e1d3989cddd6" class="border-box">
+                            <div class="small-box bg-yellow	">
+                                <div class="inner inner-box">
+                                    <h3>{{ $nb_materiels_hs }}</h3>
+                                    <p>Matériel HS</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-gear-a"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="868a3014d6c9309fec35f9f99add1a8d" class="border-box">
+                            <div class="small-box bg-teal">
+                                <div class="inner inner-box">
+                                    <h3>{{ $val_materiels_hs }}</h3>
+                                    <p>Valeur matériel HS</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-social-euro"></i>
+                                </div>
+                                <a href="/admin/filiale{{$filiale_number}}" class="small-box-footer">Plus d'infos <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            --}}
+            
 
         <!-- Your Page Content Here -->
             @yield('content')
