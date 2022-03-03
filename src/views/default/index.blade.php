@@ -65,10 +65,10 @@
                                     class='fa fa-check-square-o'></i> {{cbLang("button_selected_action")}}
                             <span class="fa fa-caret-down"></span></button>
                         <ul class="dropdown-menu">
-                            @if($button_delete && CRUDBooster::isDelete())
+                            {{-- @if($button_delete && CRUDBooster::isDelete())
                                 <li><a href="javascript:void(0)" data-name='delete' title='{{cbLang('action_delete_selected')}}'><i
                                                 class="fa fa-trash"></i> {{cbLang('action_delete_selected')}}</a></li>
-                            @endif
+                            @endif --}}
 
                             @if($button_selected)
                                 @foreach($button_selected as $button)
