@@ -226,7 +226,7 @@ class AdminController extends CBController {
 
 		CRUDBooster::insertLog(cbLang("crudbooster.log_forgot",['email'=>g('email'),'ip'=>Request::server('REMOTE_ADDR')]));
 
-		return redirect()->route('getLogin')->with('message', cbLang("crudbooster.message_forgot_password"));
+		return redirect()->route('getLogin')->with('message', 'Un nouveau mot de passe vient de vous être envoyé');
 
 	}	
 
