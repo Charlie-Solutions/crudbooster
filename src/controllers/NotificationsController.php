@@ -37,6 +37,28 @@ class NotificationsController extends CBController
         $this->form[] = ["label" => "Icon", "name" => "icon", "type" => "text"];
         $this->form[] = ["label" => "Notification Command", "name" => "notification_command", "type" => "textarea"];
         $this->form[] = ["label" => "Is Read", "name" => "is_read", "type" => "text"];
+
+        $this->addaction = array();
+
+        $this->button_selected = array();
+        $this->button_selected[] = ['label'=>'Supprimer la sélection','icon'=>'fa fa-trash','name'=>'set_delete'];
+    }
+
+    /*
+    | ---------------------------------------------------------------------- 
+    | Hook for button selected
+    | ---------------------------------------------------------------------- 
+    | @id_selected = the id selected
+    | @button_name = the name of button
+    |
+    */
+    public function actionButtonSelected($id_selected,$button_name) {
+        if($button_name == 'set_delete'){
+            foreach ($id_selected as $key) {
+                // deleting the notification
+                DB::table('cms_notifications')->where('id',$key)->delete();
+            }
+        }
     }
 
     public function hook_query_index(&$query)
