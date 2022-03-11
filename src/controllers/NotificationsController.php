@@ -16,6 +16,8 @@ class NotificationsController extends CBController
         $this->index_orderby = ["id" => "desc"];
         $this->button_show = true;
         $this->button_add = false;
+        $this->button_edit = false;
+        $this->button_detail = false;
         $this->button_delete = true;
         $this->button_export = false;
         $this->button_import = false;
@@ -42,6 +44,7 @@ class NotificationsController extends CBController
 
         $this->button_selected = array();
         $this->button_selected[] = ['label'=>'Supprimer la sélection','icon'=>'fa fa-trash','name'=>'set_delete'];
+        $this->button_selected[] = ['label'=>'Marquer comme lu','icon'=>'fa fa-arrow-right','name'=>'set_lu'];
     }
 
     /*
@@ -53,10 +56,18 @@ class NotificationsController extends CBController
     |
     */
     public function actionButtonSelected($id_selected,$button_name) {
+        // deleting selectednotification
         if($button_name == 'set_delete'){
             foreach ($id_selected as $key) {
                 // deleting the notification
                 DB::table('cms_notifications')->where('id',$key)->delete();
+            }
+        }
+        // updating selected notifications to read
+        if($button_name == 'set_lu'){
+            foreach ($id_selected as $key) {
+                // updating the notification
+                DB::table('cms_notifications')->where('id',$key)->update(['is_read'=>1]);
             }
         }
     }
