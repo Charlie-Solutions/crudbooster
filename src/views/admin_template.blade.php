@@ -7,7 +7,7 @@
         $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
         // on découpe le titre
         // we cut the title and get the rest
-        $morceau = substr($titleofpageComple,19);
+        $morceau = substr($titleofpageComple,9);
         // get the filiale number
         $filiale_number = substr($titleofpageComple,55);
     ?>
@@ -93,6 +93,39 @@
         .form-group > label:first-child {
             display: block
         }
+        .multiselect {
+        width: 200px;
+        }
+
+        .selectBox {
+        position: relative;
+        }
+
+        .selectBox select {
+        width: 100%;
+        font-weight: bold;
+        }
+
+        .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        }
+
+        #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+        }
+
+        #checkboxes label {
+        display: block;
+        }
+
+        #checkboxes label:hover {
+        background-color: #1e90ff;
+        }
 
         #table_dashboard.table-bordered, #table_dashboard.table-bordered thead tr th, #table_dashboard.table-bordered tbody tr td {
             border: 1px solid #bbbbbb !important;
@@ -117,6 +150,7 @@
             <?php
             $module = CRUDBooster::getCurrentModule();
             ?>
+            {{-- {{  $morceau }} --}}
             @if($module)
                 <h1>
                     <!--Now you can define $page_icon alongside $page_tite for custom forms to follow CRUDBooster theme style -->
@@ -141,11 +175,11 @@
                     @endif
                     <!-- Statistique button -->
                     <!-- We use the title to get the number and the type(suivi/isolé) of the materiel to show/hide the button from the user -->
-                    @for ($i = 1; $i <=1; $i++)
+                    {{-- @for ($i = 1; $i <=1; $i++)
                         <input id="prodId" name="prodId" type="hidden" value={{ $i }}>
                         @if($morceau == "statistiques-suivi-materiels-filiale".$i)
                             <?php
-                            if($morceau == "statistiques-suivi-materiels-filiale".$i){
+                            if($morceau == "es-suivi-materiels-filiale".$i){
                                 $id = "rapport_".$i;
                             }
                             ?>
@@ -153,7 +187,7 @@
                                 <a type="submit" class="btn btn-sm btn-primary" href='{{ url('report-form/'.$id) }}'>Générer un rapport</a>
                             @endif
                         @endif
-                    @endfor
+                    @endfor --}}
 
 
                     @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
@@ -168,6 +202,10 @@
                            class="btn btn-sm btn-primary btn-import-data">
                             <i class="fa fa-download"></i> {{cbLang("button_import")}}
                         </a>
+                    @endif
+                    {{-- Button to show the Config GPS Modal --}}
+                    @if($morceau == "Zone de stockage")
+                            <a type="submit" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#gpsConfigModal">Config GPS</a>
                     @endif
 
                 <!--ADD ACTIon-->
@@ -454,6 +492,109 @@
             @yield('content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
+    <!-- Modal Config GPS-->
+    {{-- Geeting the data from the data base of all storage zones --}}
+    <?php
+        $storage_zones = DB::table('charlie_zone_stockage')->get();
+    ?>
+    <div class="modal fade" id="gpsConfigModal" tabindex="-1" role="dialog" aria-labelledby="gpsConfigModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Paramétrage du GPS</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <form class="form-signin" method="post" action="{{url('/rgpd-form')}}">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                          <select>
+                            <option>Select an option</option>
+                          </select>
+                          <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes" style="overflow:auto;">
+                            @foreach ($storage_zones as $key)
+                                <label for="one"><input type="checkbox" name="zones[]" id="{{ $key->id }}" value="{{ $key->id }}" />{{ $key->name }}</label>
+                            @endforeach
+                        </div>
+                      </div>
+                    <br>
+
+                    <span>Actif :</span>
+                    <input type="radio" name="is_active" value="1">
+                    <label class="label-form">Oui</label> 
+                    <input type="radio" name="is_active" value="0" checked>
+                    <label class="label-form">Non</label>
+                    <br>
+
+                    <label class="label-formtime">Heure de début</label>
+                    <input type="time" name="start-hour">
+                    <label class="label-formtime">Heure de fin</label>
+                    <input type="time" name="end-hour">
+                    <br>
+
+                    <span>Répéter tou(te)s les :</span> <input type="number" min="0" style="width: 50px;" name="repeat_nbr">
+                    <select name="repeat_period_date">
+                        <option value="jour">jour</option>
+                        <option value="semaine">semaine</option>
+                        <option value="mois">mois</option>
+                        <option value="annee">année</option>
+                    </select>
+                    <br>
+
+                    <span>Répéter le</span>
+                    <select name="repeat_date">
+                        <option value="dimanche">Dimanche</option>
+                        <option value="lundi">lundi</option>
+                        <option value="mardi">mardi</option>
+                        <option value="mercredi">mercredi</option>
+                        <option value="jeudi">jeudi</option>
+                        <option value="vendredi">vendredi</option>
+                        <option value="samedi">samedi</option>
+                    </select>
+                    <br>
+
+                    <span>Se termine le :</span><br>
+                    <input type="radio" name="end_value" value="0" onchange="checkIfSelected(this)" checked>
+                    <label class="label-form">Jamais</label><br>
+                    <input type="radio" name="end_value" value="1" onchange="checkIfSelected(this)">
+                    <label class="label-form">Le</label> <input type="date" name="end_date" id="end_date" disabled>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+    <script>
+    var expanded = false;
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+    function checkIfSelected(el) {
+        console.log(el.value);
+        if(el.value == 1){
+            document.getElementById("end_date").disabled = false;
+        }else{
+            document.getElementById("end_date").disabled = true;
+        }
+    }
+    </script>
 
     <!-- Footer -->
     @include('crudbooster::footer')
