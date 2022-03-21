@@ -126,6 +126,19 @@
         #checkboxes label:hover {
         background-color: #1e90ff;
         }
+        /*  */
+        #checkboxes_days {
+        display: none;
+        border: 1px #dadada solid;
+        }
+
+        #checkboxes_days label {
+        display: block;
+        }
+
+        #checkboxes_days label:hover {
+        background-color: #1e90ff;
+        }
 
         #table_dashboard.table-bordered, #table_dashboard.table-bordered thead tr th, #table_dashboard.table-bordered tbody tr td {
             border: 1px solid #bbbbbb !important;
@@ -509,7 +522,7 @@
             <form class="form-signin" method="post" action="{{url('/rgpd-form')}}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="modal-body">
-                    
+
                     <div class="multiselect">
                         <div class="selectBox" onclick="showCheckboxes()">
                           <select>
@@ -519,7 +532,7 @@
                         </div>
                         <div id="checkboxes" style="overflow:auto;">
                             @foreach ($storage_zones as $key)
-                                <label for="one"><input type="checkbox" name="zones[]" id="{{ $key->id }}" value="{{ $key->id }}" />{{ $key->name }}</label>
+                                <label for="one"><input type="checkbox" name="zones[]" id="{{ $key->id }}" value="{{ $key->id }}" /> {{ $key->name }}</label>
                             @endforeach
                         </div>
                       </div>
@@ -533,9 +546,9 @@
                     <br>
 
                     <label class="label-formtime">Heure de début</label>
-                    <input type="time" name="start-hour">
+                    <input type="time" name="start_hour">
                     <label class="label-formtime">Heure de fin</label>
-                    <input type="time" name="end-hour">
+                    <input type="time" name="end_hour">
                     <br>
 
                     <span>Répéter tou(te)s les :</span> <input type="number" min="0" style="width: 50px;" name="repeat_nbr">
@@ -548,15 +561,23 @@
                     <br>
 
                     <span>Répéter le</span>
-                    <select name="repeat_date">
-                        <option value="dimanche">Dimanche</option>
-                        <option value="lundi">lundi</option>
-                        <option value="mardi">mardi</option>
-                        <option value="mercredi">mercredi</option>
-                        <option value="jeudi">jeudi</option>
-                        <option value="vendredi">vendredi</option>
-                        <option value="samedi">samedi</option>
-                    </select>
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes_days()">
+                            <select>
+                            <option>Select an option</option>
+                            </select>
+                            <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes_days">
+                            <label><input type="checkbox" name="repeat_date[]" id="dimanche" value="dimanche" /> dimanche</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="lundi" value="lundi" /> lundi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="mardi" value="mardi" /> mardi</label>
+                            <label ><input type="checkbox" name="repeat_date[]" id="mercredi" value="mercredi" /> mercredi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="jeudi" value="jeudi" /> jeudi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="vendredi" value="vendredi" /> vendredi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="samedi" value="samedi" /> samedi</label>
+                        </div>
+                    </div>
                     <br>
 
                     <span>Se termine le :</span><br>
@@ -586,6 +607,17 @@
             expanded = false;
         }
     }
+    function showCheckboxes_days() {
+        var checkboxes = document.getElementById("checkboxes_days");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+
     function checkIfSelected(el) {
         console.log(el.value);
         if(el.value == 1){
