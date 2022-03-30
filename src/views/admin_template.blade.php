@@ -552,12 +552,6 @@
                     <br>
 
                     <span>Répéter tou(te)s les :</span> <input type="number" min="0" style="width: 50px;" name="repeat_nbr">
-                    <select name="repeat_period_date">
-                        <option value="jour">jour</option>
-                        <option value="semaine">semaine</option>
-                        <option value="mois">mois</option>
-                        <option value="annee">année</option>
-                    </select>
                     <br>
 
                     <span>Répéter le</span>
