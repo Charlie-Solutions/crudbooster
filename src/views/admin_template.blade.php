@@ -612,6 +612,7 @@
     function checkIfSelected(el) {
         if(el.value == 1){
             document.getElementById("end_date_id").disabled = false;
+            document.getElementById("end_date_id").value = "";
         }else{
             document.getElementById("end_date_id").disabled = true;
         }
@@ -696,7 +697,6 @@
             document.getElementById("jeudi").checked = false;
             document.getElementById("vendredi").checked = false;
             document.getElementById("samedi").checked = false;
-            document.getElementById("mail3").checked = false;
             document.getElementById('end_value_never').checked = true;
             document.getElementById('end_value_with_date').checked = false;
             document.getElementById("end_date_id").value = "";
