@@ -1177,17 +1177,13 @@ class CRUDBooster
         $to = $config['to'];
         $id_cms_users = $config['id_cms_users'];
         $id_cms_users = ($id_cms_users) ?: [CRUDBooster::myId()];
-        $idMat = $config['id_materiel'];
-        
         foreach ($id_cms_users as $id) {
             $a = [];
-            $a['id_materiel'] = $idMat;
             $a['created_at'] = date('Y-m-d H:i:s');
             $a['id_cms_users'] = $id;
             $a['content'] = $content;
             $a['is_read'] = 0;
             $a['url'] = $to;
-
             DB::table('cms_notifications')->insert($a);
         }
 
@@ -1293,7 +1289,7 @@ class CRUDBooster
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
         $php = '
-		<?php namespace App\Http\Controllers;
+		<?php namespace App\Http\Controllers\CrudboosterApi;
 
 		use Session;
 		use Request;
@@ -1332,7 +1328,7 @@ class CRUDBooster
 		';
 
         $php = trim($php);
-        $path = base_path("app/Http/Controllers/");
+        $path = base_path("app/Http/Controllers/CrudboosterApi/");
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 
