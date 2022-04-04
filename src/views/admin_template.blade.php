@@ -520,62 +520,67 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="modal-body">
 
-                    <div class="multiselect" style=" width: 100%;">
+                    <div class="multiselect" style=" width: 100%;overflow-y:auto;">
                         <div class="selectBox" onclick="showCheckboxes()">
-                          <select style=" width: 100%;">
+                          <select style=" width: 100%;overflow-y:auto;">
                             <option>Choisissez une zone de stockage</option>
                           </select>
                           <div class="overSelect"></div>
                         </div>
-                        <div id="checkboxes" style="overflow:auto;">
+                        <div id="checkboxes" style="overflow-y:auto;">
                             @foreach ($storage_zones as $key)
-                                <label for="one"><input type="checkbox" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> {{ $key->name }}</label>
+                                <span for="one"><input type="checkbox" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> {{ $key->name }}</span><br/>
                             @endforeach
                         </div>
                       </div>
                     <br>
 
-                    <span>Actif :</span>
-                    <input type="radio" name="is_active" id="radiobutton_active" value="1">
-                    <label class="label-form">Oui</label> 
-                    <input type="radio" name="is_active" id="radiobutton_notactive" value="0" checked>
-                    <label class="label-form">Non</label>
+                    <div style="text-align: center;">
+                    <span>Desactiver le GPS :</span>
+                        <input type="radio" name="is_active" id="radiobutton_active" value="1">
+                        <label class="label-form">Oui</label> 
+                        &nbsp;
+                        <input type="radio" name="is_active" id="radiobutton_notactive" value="0" checked>
+                        <label class="label-form">Non</label>
+                    </div>
                     <br>
 
-                    <label class="label-formtime">Heure de début</label>
-                    <input type="time" name="start_hour" id="starttime">
-                    <label class="label-formtime">Heure de fin</label>
-                    <input type="time" name="end_hour" id="endtime">
+                    <div style="text-align: center;">
+                        <span class="label-formtime">Heure de début</span>
+                        <input type="time" name="start_hour" id="starttime">
+                        &nbsp;
+                        <span class="label-formtime">Heure de fin</span>
+                        <input type="time" name="end_hour" id="endtime">
+                    </div>
                     <br>
 
-                    {{-- <span>Répéter tou(te)s les :</span> <input type="number" min="0" style="width: 50px;" name="repeat_nbr">
-                    <br> --}}
-
-                    <span>Répéter le</span>
-                    <div class="multiselect">
+                    <div class="multiselect" style=" width: 100%;overflow-y:auto;">
                         <div class="selectBox" onclick="showCheckboxes_days()">
                             <select>
-                            <option>Sélectionnez un jour</option>
+                            <option>Sélectionnez un(des) jour(s)</option>
                             </select>
                             <div class="overSelect"></div>
                         </div>
-                        <div id="checkboxes_days">
-                            <label><input type="checkbox" name="repeat_date[]" id="dimanche" value="Sunday" /> dimanche</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="lundi" value="Monday" /> lundi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="mardi" value="Tuesday" /> mardi</label>
-                            <label ><input type="checkbox" name="repeat_date[]" id="mercredi" value="Wednesday" /> mercredi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="jeudi" value="Thursday" /> jeudi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="vendredi" value="Friday" /> vendredi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="samedi" value="Saturday" /> samedi</label>
+                        <div id="checkboxes_days" style="overflow-y:auto;">
+                            <span><input type="checkbox" name="repeat_date[]" id="dimanche" value="Sunday" /> dimanche</span> <br>
+                            <span><input type="checkbox" name="repeat_date[]" id="lundi" value="Monday" /> lundi</span><br>
+                            <span><input type="checkbox" name="repeat_date[]" id="mardi" value="Tuesday" /> mardi</span><br>
+                            <span ><input type="checkbox" name="repeat_date[]" id="mercredi" value="Wednesday" /> mercredi</span><br>
+                            <span><input type="checkbox" name="repeat_date[]" id="jeudi" value="Thursday" /> jeudi</span><br>
+                            <span><input type="checkbox" name="repeat_date[]" id="vendredi" value="Friday" /> vendredi</span><br>
+                            <span><input type="checkbox" name="repeat_date[]" id="samedi" value="Saturday" /> samedi</span>
                         </div>
                     </div>
                     <br>
 
-                    <span>Se termine le :</span><br>
-                    <input type="radio" name="end_value" value="0" id="end_value_never" onchange="checkIfSelected(this)" checked>
-                    <label class="label-form">Jamais</label><br>
-                    <input type="radio" name="end_value" value="1" id="end_value_with_date" onchange="checkIfSelected(this)">
-                    <label class="label-form">Le</label> <input type="date" name="end_date" id="end_date_id" disabled>
+                    <div style="text-align: center;">
+                    <span>Se termine le :</span>&nbsp;
+                        <input type="radio" name="end_value" value="0" id="end_value_never" onchange="checkIfSelected(this)" checked>
+                        <label class="label-form">Jamais</label>
+                        &nbsp;
+                        <input type="radio" name="end_value" value="1" id="end_value_with_date" onchange="checkIfSelected(this)">
+                        <label class="label-form">Le</label> <input type="date" name="end_date" id="end_date_id" disabled>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -625,10 +630,8 @@
                 array.push(checks[i].value);
             }
         }
-        console.log('ici');
         if(array.length == 1){
             let element = array[0];
-            console.log(element);
             $.ajax({
                 type:"POST",
                 url:'/admin/fill-formgps',
@@ -636,7 +639,6 @@
                 success:function(response){
                     // decoding data
                     var json = JSON.parse(response);
-                    console.log(json);
                     // updating the radio button
                     if(json['is_active'] == 1){
                         document.getElementById('radiobutton_active').checked = true;
