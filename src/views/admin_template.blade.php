@@ -514,71 +514,68 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title">Paramétrage du GPS</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <h3 style="background-color: #be1623;width: 40%;margin-left: 30%;color: white;padding: 10px;">Paramétrage du GPS</h3>
             </div>
             <form class="form-signin" method="post" action="{{url('/rgpd-form')}}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="modal-body">
 
-                    <div class="multiselect">
+                    <div class="multiselect" style=" width: 100%;">
                         <div class="selectBox" onclick="showCheckboxes()">
-                          <select>
-                            <option>Select an option</option>
+                          <select style=" width: 100%;">
+                            <option>Choisissez une zone de stockage</option>
                           </select>
                           <div class="overSelect"></div>
                         </div>
                         <div id="checkboxes" style="overflow:auto;">
                             @foreach ($storage_zones as $key)
-                                <label for="one"><input type="checkbox" name="zones[]" id="{{ $key->id }}" value="{{ $key->id }}" /> {{ $key->name }}</label>
+                                <label for="one"><input type="checkbox" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> {{ $key->name }}</label>
                             @endforeach
                         </div>
                       </div>
                     <br>
 
                     <span>Actif :</span>
-                    <input type="radio" name="is_active" value="1">
+                    <input type="radio" name="is_active" id="radiobutton_active" value="1">
                     <label class="label-form">Oui</label> 
-                    <input type="radio" name="is_active" value="0" checked>
+                    <input type="radio" name="is_active" id="radiobutton_notactive" value="0" checked>
                     <label class="label-form">Non</label>
                     <br>
 
                     <label class="label-formtime">Heure de début</label>
-                    <input type="time" name="start_hour">
+                    <input type="time" name="start_hour" id="starttime">
                     <label class="label-formtime">Heure de fin</label>
-                    <input type="time" name="end_hour">
+                    <input type="time" name="end_hour" id="endtime">
                     <br>
 
-                    <span>Répéter tou(te)s les :</span> <input type="number" min="0" style="width: 50px;" name="repeat_nbr">
-                    <br>
+                    {{-- <span>Répéter tou(te)s les :</span> <input type="number" min="0" style="width: 50px;" name="repeat_nbr">
+                    <br> --}}
 
                     <span>Répéter le</span>
                     <div class="multiselect">
                         <div class="selectBox" onclick="showCheckboxes_days()">
                             <select>
-                            <option>Select an option</option>
+                            <option>Sélectionnez un jour</option>
                             </select>
                             <div class="overSelect"></div>
                         </div>
                         <div id="checkboxes_days">
-                            <label><input type="checkbox" name="repeat_date[]" id="dimanche" value="dimanche" /> dimanche</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="lundi" value="lundi" /> lundi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="mardi" value="mardi" /> mardi</label>
-                            <label ><input type="checkbox" name="repeat_date[]" id="mercredi" value="mercredi" /> mercredi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="jeudi" value="jeudi" /> jeudi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="vendredi" value="vendredi" /> vendredi</label>
-                            <label><input type="checkbox" name="repeat_date[]" id="samedi" value="samedi" /> samedi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="dimanche" value="Sunday" /> dimanche</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="lundi" value="Monday" /> lundi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="mardi" value="Tuesday" /> mardi</label>
+                            <label ><input type="checkbox" name="repeat_date[]" id="mercredi" value="Wednesday" /> mercredi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="jeudi" value="Thursday" /> jeudi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="vendredi" value="Friday" /> vendredi</label>
+                            <label><input type="checkbox" name="repeat_date[]" id="samedi" value="Saturday" /> samedi</label>
                         </div>
                     </div>
                     <br>
 
                     <span>Se termine le :</span><br>
-                    <input type="radio" name="end_value" value="0" onchange="checkIfSelected(this)" checked>
+                    <input type="radio" name="end_value" value="0" id="end_value_never" onchange="checkIfSelected(this)" checked>
                     <label class="label-form">Jamais</label><br>
-                    <input type="radio" name="end_value" value="1" onchange="checkIfSelected(this)">
-                    <label class="label-form">Le</label> <input type="date" name="end_date" id="end_date" disabled>
+                    <input type="radio" name="end_value" value="1" id="end_value_with_date" onchange="checkIfSelected(this)">
+                    <label class="label-form">Le</label> <input type="date" name="end_date" id="end_date_id" disabled>
 
                 </div>
                 <div class="modal-footer">
@@ -613,11 +610,96 @@
     }
 
     function checkIfSelected(el) {
-        console.log(el.value);
         if(el.value == 1){
-            document.getElementById("end_date").disabled = false;
+            document.getElementById("end_date_id").disabled = false;
         }else{
-            document.getElementById("end_date").disabled = true;
+            document.getElementById("end_date_id").disabled = true;
+        }
+    }
+    function getDataGPS() {
+        var checks = document.getElementsByClassName('checkedzones');
+        var array = [];
+        for(i = 0; i<checks.length; i++ ){
+            if(checks[i].checked){
+                array.push(checks[i].value);
+            }
+        }
+        console.log('ici');
+        if(array.length == 1){
+            let element = array[0];
+            console.log(element);
+            $.ajax({
+                type:"POST",
+                url:'/admin/fill-formgps',
+                data:{zoneID:element},
+                success:function(response){
+                    // decoding data
+                    var json = JSON.parse(response);
+                    console.log(json);
+                    // updating the radio button
+                    if(json['is_active'] == 1){
+                        document.getElementById('radiobutton_active').checked = true;
+                        document.getElementById('radiobutton_notactive').checked = false;
+                    }else{
+                        document.getElementById('radiobutton_active').checked = false;
+                        document.getElementById('radiobutton_notactive').checked = true;
+                    }
+                    // updating the time
+                    document.getElementById("starttime").value = json['start_hour'];
+                    document.getElementById("endtime").value = json['end_hour'];
+                    // splitting the array of days chosen
+                    var arraydays = json['repeat_date'].split(",");
+                    console.log(arraydays);
+                    for(i = 0; i<arraydays.length; i++ ){
+                        if(arraydays[i] == "Sunday"){
+                            document.getElementById("dimanche").checked = true;
+                        }else if(arraydays[i] == "Monday"){
+                            document.getElementById("lundi").checked = true;
+                        }else if(arraydays[i] == "Tuesday"){
+                            document.getElementById("mardi").checked = true;
+                        }else if(arraydays[i] == "Wednesday"){
+                            document.getElementById("mercredi").checked = true;
+                        }else if(arraydays[i] == "Thursday"){
+                            document.getElementById("jeudi").checked = true;
+                        }else if(arraydays[i] == "Friday"){
+                            document.getElementById("vendredi").checked = true;
+                        }else if(arraydays[i] == "Saturday"){
+                            document.getElementById("samedi").checked = true;
+                        }
+                    }
+
+                    if(json['end_value'] == 0){
+                        document.getElementById('end_value_never').checked = true;
+                        document.getElementById('end_value_with_date').checked = false;
+                        document.getElementById("end_date_id").value = "";
+                    }else{
+                        document.getElementById('end_value_never').checked = false;
+                        document.getElementById('end_value_with_date').checked = true;
+                        document.getElementById("end_date_id").value = json['end_date'];
+                    }
+                },
+                error: function(codeErreur){
+                    string = JSON.stringify(codeErreur);
+                }
+            });
+
+        } else {
+            // delete data from form if more than one or none of the zones are selected
+            document.getElementById('radiobutton_active').checked = false;
+            document.getElementById('radiobutton_notactive').checked = true;
+            document.getElementById("starttime").value = "";
+            document.getElementById("endtime").value = "";
+            document.getElementById("dimanche").checked = false;
+            document.getElementById("lundi").checked = false;
+            document.getElementById("mardi").checked = false;
+            document.getElementById("mercredi").checked = false;
+            document.getElementById("jeudi").checked = false;
+            document.getElementById("vendredi").checked = false;
+            document.getElementById("samedi").checked = false;
+            document.getElementById("mail3").checked = false;
+            document.getElementById('end_value_never').checked = true;
+            document.getElementById('end_value_with_date').checked = false;
+            document.getElementById("end_date_id").value = "";
         }
     }
     </script>
