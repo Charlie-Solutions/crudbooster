@@ -26,9 +26,9 @@ class CBRouter
             Route::post("api/get-token","ApiAuthorizationController@postGetToken");
         });
 
-        Route::group(['middleware' => ['api', CBAuthAPI::class], 'namespace' => 'App\Http\Controllers'], function () {
+        Route::group(['middleware' => ['api', CBAuthAPI::class], 'namespace' => 'App\Http\Controllers\CrudboosterApi'], function () {
 
-            $dir = scandir(base_path("app/Http/Controllers"));
+            $dir = scandir(base_path("app/Http/Controllers/CrudboosterApi"));
             foreach ($dir as $v) {
                 $v = str_replace('.php', '', $v);
                 $names = array_filter(preg_split('/(?=[A-Z])/', str_replace('Controller', '', $v)));
