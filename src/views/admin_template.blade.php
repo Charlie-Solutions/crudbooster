@@ -7,7 +7,7 @@
         $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
         // on découpe le titre
         // we cut the title and get the rest
-        $morceau = substr($titleofpageComple,9);
+        $morceau = substr($titleofpageComple,19);
         // get the filiale number
         $filiale_number = substr($titleofpageComple,55);
     ?>
@@ -527,7 +527,7 @@
                           </select>
                           <div class="overSelect"></div>
                         </div>
-                        <div id="checkboxes" style="overflow-y:auto;">
+                        <div id="checkboxes" style="max-height: 100px;overflow-y: auto;">
                             @foreach ($storage_zones as $key)
                                 <span for="one"><input type="checkbox" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> {{ $key->name }}</span><br/>
                             @endforeach
