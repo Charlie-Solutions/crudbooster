@@ -15,7 +15,9 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-
+        <?php
+            if(CRUDBooster::myPrivilegeId() != 5) {
+        ?>
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" title='Notifications' aria-expanded="false">
                         <i id='icon_notification' class="fa fa-bell-o"></i>
@@ -43,7 +45,7 @@
                         <li class="footer"><a href="{{route('NotificationsControllerGetIndex')}}">{{cbLang("text_view_all_notification")}}</a></li>
                     </ul>
                 </li>
-
+        <?php } ?>
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
