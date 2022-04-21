@@ -547,10 +547,10 @@
 
                     <div style="text-align: center;">
                         <span class="label-formtime">Heure de début</span>&nbsp;&nbsp;
-                        <input type="time" name="start_hour" id="starttime">
+                        <input type="time" name="start_hour" id="starttime" onchange="checkTimeDebut()">
                         &nbsp;
                         <span class="label-formtime">Heure de fin</span>&nbsp;&nbsp;
-                        <input type="time" name="end_hour" id="endtime" onchange="checkEnTime()">
+                        <input type="time" name="end_hour" id="endtime" onchange="checkTimeFin()">
                     </div>
                     <div style="text-align: center;">
                         <span class='label label-danger' style="visibility: hidden;margin-bottom: 2px;margin-top: 2px;" id="hidden_msg">L’heure de fin doit être strictement supérieur à l’heure de début</span>
@@ -593,7 +593,7 @@
         </div>
         </div>
     </div>
-    <script>
+<script>
     var expanded = false;
     function showCheckboxes() {
         var checkboxes = document.getElementById("checkboxes");
@@ -707,19 +707,35 @@
         }
     }
 
-    function checkEnTime() {
+    function checkTimeFin() {
         var starttime = document.getElementById("starttime").value;
         var endtime = document.getElementById("endtime").value;
         var hidden_msg = document.getElementById("hidden_msg");
-        if(endtime < starttime){
+        if(starttime !== ""){
+            if(endtime < starttime){
+                document.getElementById("hidden_msg").style.visibility = "visible";
+                document.getElementById("submitbutton").disabled = true;
+            }else{
+                document.getElementById("hidden_msg").style.visibility = "hidden";
+                document.getElementById("submitbutton").disabled = false;
+            }
+            }
+    }
+    function checkTimeDebut(){
+        var starttime = document.getElementById("starttime").value;
+        var endtime = document.getElementById("endtime").value;
+        var hidden_msg = document.getElementById("hidden_msg");
+        if(endtime !== ""){
+            if(starttime > endtime ){
             document.getElementById("hidden_msg").style.visibility = "visible";
             document.getElementById("submitbutton").disabled = true;
-        }else{
-            document.getElementById("hidden_msg").style.visibility = "hidden";
-            document.getElementById("submitbutton").disabled = false;
+            }else{
+                document.getElementById("hidden_msg").style.visibility = "hidden";
+                document.getElementById("submitbutton").disabled = false;
+            }
         }
     }
-    </script>
+</script>
 
     <!-- Footer -->
     @include('crudbooster::footer')
