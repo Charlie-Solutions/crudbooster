@@ -529,14 +529,14 @@
                         </div>
                         <div id="checkboxes" style="max-height: 100px;overflow-y: auto;">
                             @foreach ($storage_zones as $key)
-                                <span for="one"><input type="checkbox" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> {{ $key->name }}</span><br/>
+                                <span for="one"><input type="checkbox" style="margin-left: 2px;" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> &nbsp;{{ $key->name }}</span><br/>
                             @endforeach
                         </div>
                       </div>
                     <br>
 
                     <div style="text-align: center;">
-                    <span>Desactiver le GPS :</span>
+                    <span>Désactiver le GPS :</span>&nbsp;&nbsp;
                         <input type="radio" name="is_active" id="radiobutton_active" value="1">
                         <label class="label-form">Oui</label> 
                         &nbsp;
@@ -546,14 +546,16 @@
                     <br>
 
                     <div style="text-align: center;">
-                        <span class="label-formtime">Heure de début</span>
+                        <span class="label-formtime">Heure de début</span>&nbsp;&nbsp;
                         <input type="time" name="start_hour" id="starttime">
                         &nbsp;
-                        <span class="label-formtime">Heure de fin</span>
-                        <input type="time" name="end_hour" id="endtime">
+                        <span class="label-formtime">Heure de fin</span>&nbsp;&nbsp;
+                        <input type="time" name="end_hour" id="endtime" onchange="checkEnTime()">
+                    </div>
+                    <div style="text-align: center;">
+                        <span class='label label-danger' style="visibility: hidden;margin-bottom: 2px;margin-top: 2px;" id="hidden_msg">L’heure de fin doit être strictement supérieur à l’heure de début</span>
                     </div>
                     <br>
-
                     <div class="multiselect" style=" width: 100%;overflow-y:auto;">
                         <div class="selectBox" onclick="showCheckboxes_days()">
                             <select>
@@ -562,30 +564,30 @@
                             <div class="overSelect"></div>
                         </div>
                         <div id="checkboxes_days" style="overflow-y:auto;">
-                            <span><input type="checkbox" name="repeat_date[]" id="dimanche" value="Sunday" /> dimanche</span> <br>
-                            <span><input type="checkbox" name="repeat_date[]" id="lundi" value="Monday" /> lundi</span><br>
-                            <span><input type="checkbox" name="repeat_date[]" id="mardi" value="Tuesday" /> mardi</span><br>
-                            <span ><input type="checkbox" name="repeat_date[]" id="mercredi" value="Wednesday" /> mercredi</span><br>
-                            <span><input type="checkbox" name="repeat_date[]" id="jeudi" value="Thursday" /> jeudi</span><br>
-                            <span><input type="checkbox" name="repeat_date[]" id="vendredi" value="Friday" /> vendredi</span><br>
-                            <span><input type="checkbox" name="repeat_date[]" id="samedi" value="Saturday" /> samedi</span>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="dimanche" value="Sunday" />&nbsp; dimanche</span> <br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="lundi" value="Monday" />&nbsp; lundi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="mardi" value="Tuesday" />&nbsp; mardi</span><br>
+                            <span ><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="mercredi" value="Wednesday" />&nbsp; mercredi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="jeudi" value="Thursday" />&nbsp; jeudi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="vendredi" value="Friday" />&nbsp; vendredi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="samedi" value="Saturday" />&nbsp; samedi</span>
                         </div>
                     </div>
                     <br>
 
                     <div style="text-align: center;">
                     <span>Se termine le :</span>&nbsp;
-                        <input type="radio" name="end_value" value="0" id="end_value_never" onchange="checkIfSelected(this)" checked>
+                        <input type="radio" name="end_value" value="0" id="end_value_never" onchange="checkIfSelected(this)" checked>&nbsp;
                         <label class="label-form">Jamais</label>
-                        &nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" name="end_value" value="1" id="end_value_with_date" onchange="checkIfSelected(this)">
-                        <label class="label-form">Le</label> <input type="date" name="end_date" id="end_date_id" disabled>
+                        <label class="label-form">Le</label>&nbsp; <input type="date" name="end_date" id="end_date_id" disabled>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                <button type="submit" id="submitbutton" class="btn btn-primary">Sauvegarder</button>
                 </div>
             </form>
         </div>
@@ -702,6 +704,19 @@
             document.getElementById('end_value_never').checked = true;
             document.getElementById('end_value_with_date').checked = false;
             document.getElementById("end_date_id").value = "";
+        }
+    }
+
+    function checkEnTime() {
+        var starttime = document.getElementById("starttime").value;
+        var endtime = document.getElementById("endtime").value;
+        var hidden_msg = document.getElementById("hidden_msg");
+        if(endtime < starttime){
+            document.getElementById("hidden_msg").style.visibility = "visible";
+            document.getElementById("submitbutton").disabled = true;
+        }else{
+            document.getElementById("hidden_msg").style.visibility = "hidden";
+            document.getElementById("submitbutton").disabled = false;
         }
     }
     </script>
