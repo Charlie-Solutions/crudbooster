@@ -1289,7 +1289,7 @@ class CRUDBooster
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
         $php = '
-		<?php namespace App\Http\Controllers;
+		<?php namespace App\Http\Controllers\CrudboosterApi;
 
 		use Session;
 		use Request;
@@ -1328,7 +1328,7 @@ class CRUDBooster
 		';
 
         $php = trim($php);
-        $path = base_path("app/Http/Controllers/");
+        $path = base_path("app/Http/Controllers/CrudboosterApi/");
         file_put_contents($path.'Api'.$controller_name.'Controller.php', $php);
     }
 

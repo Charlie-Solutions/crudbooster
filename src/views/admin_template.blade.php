@@ -93,6 +93,52 @@
         .form-group > label:first-child {
             display: block
         }
+        .multiselect {
+        width: 200px;
+        }
+
+        .selectBox {
+        position: relative;
+        }
+
+        .selectBox select {
+        width: 100%;
+        font-weight: bold;
+        }
+
+        .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        }
+
+        #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+        }
+
+        #checkboxes label {
+        display: block;
+        }
+
+        #checkboxes label:hover {
+        background-color: #1e90ff;
+        }
+        /*  */
+        #checkboxes_days {
+        display: none;
+        border: 1px #dadada solid;
+        }
+
+        #checkboxes_days label {
+        display: block;
+        }
+
+        #checkboxes_days label:hover {
+        background-color: #1e90ff;
+        }
 
         #table_dashboard.table-bordered, #table_dashboard.table-bordered thead tr th, #table_dashboard.table-bordered tbody tr td {
             border: 1px solid #bbbbbb !important;
@@ -117,6 +163,7 @@
             <?php
             $module = CRUDBooster::getCurrentModule();
             ?>
+            {{-- {{  $morceau }} --}}
             @if($module)
                 <h1>
                     <!--Now you can define $page_icon alongside $page_tite for custom forms to follow CRUDBooster theme style -->
@@ -141,11 +188,11 @@
                     @endif
                     <!-- Statistique button -->
                     <!-- We use the title to get the number and the type(suivi/isolé) of the materiel to show/hide the button from the user -->
-                    @for ($i = 1; $i <=1; $i++)
+                    {{-- @for ($i = 1; $i <=1; $i++)
                         <input id="prodId" name="prodId" type="hidden" value={{ $i }}>
                         @if($morceau == "statistiques-suivi-materiels-filiale".$i)
                             <?php
-                            if($morceau == "statistiques-suivi-materiels-filiale".$i){
+                            if($morceau == "es-suivi-materiels-filiale".$i){
                                 $id = "rapport_".$i;
                             }
                             ?>
@@ -153,7 +200,7 @@
                                 <a type="submit" class="btn btn-sm btn-primary" href='{{ url('report-form/'.$id) }}'>Générer un rapport</a>
                             @endif
                         @endif
-                    @endfor
+                    @endfor --}}
 
 
                     @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
@@ -168,6 +215,10 @@
                            class="btn btn-sm btn-primary btn-import-data">
                             <i class="fa fa-download"></i> {{cbLang("button_import")}}
                         </a>
+                    @endif
+                    {{-- Button to show the Config GPS Modal --}}
+                    @if($morceau == "Zone de stockage")
+                            <a type="submit" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#gpsConfigModal">Config GPS</a>
                     @endif
 
                 <!--ADD ACTIon-->
@@ -454,6 +505,237 @@
             @yield('content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
+    <!-- Modal Config GPS-->
+    {{-- Geeting the data from the data base of all storage zones --}}
+    <?php
+        $storage_zones = DB::table('charlie_zone_stockage')->get();
+    ?>
+    <div class="modal fade" id="gpsConfigModal" tabindex="-1" role="dialog" aria-labelledby="gpsConfigModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h3 style="background-color: #be1623;width: 40%;margin-left: 30%;color: white;padding: 10px;">Paramétrage du GPS</h3>
+            </div>
+            <form class="form-signin" method="post" action="{{url('/rgpd-form')}}">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+
+                    <div class="multiselect" style=" width: 100%;overflow-y:auto;">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                          <select style=" width: 100%;overflow-y:auto;">
+                            <option>Choisissez une zone de stockage</option>
+                          </select>
+                          <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes" style="max-height: 100px;overflow-y: auto;">
+                            @foreach ($storage_zones as $key)
+                                <span for="one"><input type="checkbox" style="margin-left: 2px;" class="checkedzones" name="zones[]" onclick="getDataGPS();" value="{{ $key->id }}" /> &nbsp;{{ $key->name }}</span><br/>
+                            @endforeach
+                        </div>
+                      </div>
+                    <br>
+
+                    <div style="text-align: center;">
+                    <span>Désactiver le GPS :</span>&nbsp;&nbsp;
+                        <input type="radio" name="is_active" id="radiobutton_active" value="1">
+                        <label class="label-form">Oui</label> 
+                        &nbsp;
+                        <input type="radio" name="is_active" id="radiobutton_notactive" value="0" checked>
+                        <label class="label-form">Non</label>
+                    </div>
+                    <br>
+
+                    <div style="text-align: center;">
+                        <span class="label-formtime">Heure de début</span>&nbsp;&nbsp;
+                        <input type="time" name="start_hour" id="starttime" onchange="checkTimeDebut()">
+                        &nbsp;
+                        <span class="label-formtime">Heure de fin</span>&nbsp;&nbsp;
+                        <input type="time" name="end_hour" id="endtime" onchange="checkTimeFin()">
+                    </div>
+                    <div style="text-align: center;">
+                        <span class='label label-danger' style="visibility: hidden;margin-bottom: 2px;margin-top: 2px;" id="hidden_msg">L’heure de fin doit être strictement supérieur à l’heure de début</span>
+                    </div>
+                    <br>
+                    <div class="multiselect" style=" width: 100%;overflow-y:auto;">
+                        <div class="selectBox" onclick="showCheckboxes_days()">
+                            <select>
+                            <option>Sélectionnez un(des) jour(s)</option>
+                            </select>
+                            <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes_days" style="overflow-y:auto;">
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="dimanche" value="Sunday" />&nbsp; dimanche</span> <br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="lundi" value="Monday" />&nbsp; lundi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="mardi" value="Tuesday" />&nbsp; mardi</span><br>
+                            <span ><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="mercredi" value="Wednesday" />&nbsp; mercredi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="jeudi" value="Thursday" />&nbsp; jeudi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="vendredi" value="Friday" />&nbsp; vendredi</span><br>
+                            <span><input type="checkbox" style="margin-left: 2px;" name="repeat_date[]" id="samedi" value="Saturday" />&nbsp; samedi</span>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div style="text-align: center;">
+                    <span>Se termine le :</span>&nbsp;
+                        <input type="radio" name="end_value" value="0" id="end_value_never" onchange="checkIfSelected(this)" checked>&nbsp;
+                        <label class="label-form">Jamais</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="end_value" value="1" id="end_value_with_date" onchange="checkIfSelected(this)">
+                        <label class="label-form">Le</label>&nbsp; <input type="date" name="end_date" id="end_date_id" disabled>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="submit" id="submitbutton" class="btn btn-primary">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+<script>
+    var expanded = false;
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("checkboxes");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+    function showCheckboxes_days() {
+        var checkboxes = document.getElementById("checkboxes_days");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+
+    function checkIfSelected(el) {
+        if(el.value == 1){
+            document.getElementById("end_date_id").disabled = false;
+            document.getElementById("end_date_id").value = "";
+        }else{
+            document.getElementById("end_date_id").disabled = true;
+        }
+    }
+    function getDataGPS() {
+        var checks = document.getElementsByClassName('checkedzones');
+        var array = [];
+        for(i = 0; i<checks.length; i++ ){
+            if(checks[i].checked){
+                array.push(checks[i].value);
+            }
+        }
+        if(array.length == 1){
+            let element = array[0];
+            $.ajax({
+                type:"POST",
+                url:'/admin/fill-formgps',
+                data:{zoneID:element},
+                success:function(response){
+                    // decoding data
+                    var json = JSON.parse(response);
+                    // updating the radio button
+                    if(json['is_active'] == 1){
+                        document.getElementById('radiobutton_active').checked = true;
+                        document.getElementById('radiobutton_notactive').checked = false;
+                    }else{
+                        document.getElementById('radiobutton_active').checked = false;
+                        document.getElementById('radiobutton_notactive').checked = true;
+                    }
+                    // updating the time
+                    document.getElementById("starttime").value = json['start_hour'];
+                    document.getElementById("endtime").value = json['end_hour'];
+                    // splitting the array of days chosen
+                    var arraydays = json['repeat_date'].split(",");
+                    console.log(arraydays);
+                    for(i = 0; i<arraydays.length; i++ ){
+                        if(arraydays[i] == "Sunday"){
+                            document.getElementById("dimanche").checked = true;
+                        }else if(arraydays[i] == "Monday"){
+                            document.getElementById("lundi").checked = true;
+                        }else if(arraydays[i] == "Tuesday"){
+                            document.getElementById("mardi").checked = true;
+                        }else if(arraydays[i] == "Wednesday"){
+                            document.getElementById("mercredi").checked = true;
+                        }else if(arraydays[i] == "Thursday"){
+                            document.getElementById("jeudi").checked = true;
+                        }else if(arraydays[i] == "Friday"){
+                            document.getElementById("vendredi").checked = true;
+                        }else if(arraydays[i] == "Saturday"){
+                            document.getElementById("samedi").checked = true;
+                        }
+                    }
+
+                    if(json['end_value'] == 0){
+                        document.getElementById('end_value_never').checked = true;
+                        document.getElementById('end_value_with_date').checked = false;
+                        document.getElementById("end_date_id").value = "";
+                    }else{
+                        document.getElementById('end_value_never').checked = false;
+                        document.getElementById('end_value_with_date').checked = true;
+                        document.getElementById("end_date_id").value = json['end_date'];
+                    }
+                },
+                error: function(codeErreur){
+                    string = JSON.stringify(codeErreur);
+                }
+            });
+
+        } else {
+            // delete data from form if more than one or none of the zones are selected
+            document.getElementById('radiobutton_active').checked = false;
+            document.getElementById('radiobutton_notactive').checked = true;
+            document.getElementById("starttime").value = "";
+            document.getElementById("endtime").value = "";
+            document.getElementById("dimanche").checked = false;
+            document.getElementById("lundi").checked = false;
+            document.getElementById("mardi").checked = false;
+            document.getElementById("mercredi").checked = false;
+            document.getElementById("jeudi").checked = false;
+            document.getElementById("vendredi").checked = false;
+            document.getElementById("samedi").checked = false;
+            document.getElementById('end_value_never').checked = true;
+            document.getElementById('end_value_with_date').checked = false;
+            document.getElementById("end_date_id").value = "";
+        }
+    }
+
+    function checkTimeFin() {
+        var starttime = document.getElementById("starttime").value;
+        var endtime = document.getElementById("endtime").value;
+        var hidden_msg = document.getElementById("hidden_msg");
+        if(starttime !== ""){
+            if(endtime < starttime){
+                document.getElementById("hidden_msg").style.visibility = "visible";
+                document.getElementById("submitbutton").disabled = true;
+            }else{
+                document.getElementById("hidden_msg").style.visibility = "hidden";
+                document.getElementById("submitbutton").disabled = false;
+            }
+            }
+    }
+    function checkTimeDebut(){
+        var starttime = document.getElementById("starttime").value;
+        var endtime = document.getElementById("endtime").value;
+        var hidden_msg = document.getElementById("hidden_msg");
+        if(endtime !== ""){
+            if(starttime > endtime ){
+            document.getElementById("hidden_msg").style.visibility = "visible";
+            document.getElementById("submitbutton").disabled = true;
+            }else{
+                document.getElementById("hidden_msg").style.visibility = "hidden";
+                document.getElementById("submitbutton").disabled = false;
+            }
+        }
+    }
+</script>
 
     <!-- Footer -->
     @include('crudbooster::footer')

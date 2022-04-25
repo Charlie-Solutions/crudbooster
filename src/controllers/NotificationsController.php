@@ -74,7 +74,7 @@ class NotificationsController extends CBController
 
     public function hook_query_index(&$query)
     {
-        $query->where('id_cms_users', CRUDBooster::myId());
+        $query->where('id_cms_users', CRUDBooster::myId())->whereNull('deleted_at');
     }
 
     public function getLatestJson()
