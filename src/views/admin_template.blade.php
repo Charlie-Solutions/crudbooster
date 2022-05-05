@@ -217,8 +217,9 @@
                         </a>
                     @endif
                     {{-- Button to show the Config GPS Modal --}}
-                    @if($morceau == "Zone de stockage")
-                            <a type="submit" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#gpsConfigModal">Config GPS</a>
+                    {{-- check if we have the privileges (not "Lecture") --}}
+                    @if($morceau == "Zone de stockage" && CRUDBooster::myPrivilegeId()!=4)
+                        <a type="submit" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#gpsConfigModal">Config GPS</a>
                     @endif
 
                 <!--ADD ACTIon-->
