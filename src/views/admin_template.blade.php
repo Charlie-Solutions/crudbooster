@@ -188,11 +188,11 @@
                     @endif
                     <!-- Statistique button -->
                     <!-- We use the title to get the number and the type(suivi/isolé) of the materiel to show/hide the button from the user -->
-                    {{-- @for ($i = 1; $i <=1; $i++)
+                    @for ($i = 1; $i <=1; $i++)
                         <input id="prodId" name="prodId" type="hidden" value={{ $i }}>
                         @if($morceau == "statistiques-suivi-materiels-filiale".$i)
                             <?php
-                            if($morceau == "es-suivi-materiels-filiale".$i){
+                            if($morceau == "statistiques-suivi-materiels-filiale".$i){
                                 $id = "rapport_".$i;
                             }
                             ?>
@@ -200,7 +200,7 @@
                                 <a type="submit" class="btn btn-sm btn-primary" href='{{ url('report-form/'.$id) }}'>Générer un rapport</a>
                             @endif
                         @endif
-                    @endfor --}}
+                    @endfor
 
 
                     @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
