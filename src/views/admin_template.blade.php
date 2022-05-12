@@ -7,7 +7,7 @@
         $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
         // on découpe le titre
         // we cut the title and get the rest
-        $morceau = substr($titleofpageComple,19);
+        $morceau = substr($titleofpageComple,9);
         // get the filiale number
         $filiale_number = substr($titleofpageComple,55);
     ?>
