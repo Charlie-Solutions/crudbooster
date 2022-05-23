@@ -69,12 +69,13 @@ class CRUDBooster
             $file = Request::file($name);
             $ext = $file->getClientOriginalExtension();
             $filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+            
             if(method_exists($file, 'getClientSize')) {
                 $filesize = $file->getClientSize() / 1024;
             } else {
                 $filesize = $file->getSize() / 1024;
             }
-            $file_path = 'uploads/'.$userID.'/'.date('Y-m');
+            // $file_path = 'uploads/'.$userID.'/'.date('Y-m');
             $file_path = 'uploads/shares/Zone_Materiel/'.date('Y-m');
 
             //Create Directory Monthly
