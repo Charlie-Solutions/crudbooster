@@ -157,10 +157,13 @@
                                 ?>
                                 <td {{ $columns[$j]['style'] or ''}}>
                                     @if($idInventory)
-                                        <?php $h = substr($h,0,-6)."<a href=\"https://dev6.1.2.charlie-solutions.com/admin/moredetails?id=$idInventory->id\" class=\"btn btn-xs btn-warning\"><i class=\"fa fa-map-marker\"></i></a>".substr($h,-6);
-                                         ?>
+                                        <?php $starth=$h = substr($h,0,-6); $endh=substr($h,-6); ?>
+                                        {!! $starth !!}
+                                        <a href="{{ URL::to('admin/moredetails?id=' . $idInventory->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-map-marker"></i></a> 
+                                        {!! $endh !!}
+                                    @else
+                                        {!! $h !!}
                                     @endif
-                                    {!! $h !!}
                                 </td>
                             @else
                                 <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
