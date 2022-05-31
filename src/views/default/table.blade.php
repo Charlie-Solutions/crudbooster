@@ -153,8 +153,8 @@
                         @if($morceau == "Zone de stockage")
                             @if($j == 8)
                                 <?php 
-                                    $idInventory = DB::table('charlie_inventory')->where('numero_gateway',$hc[3])->orderBy('created_at', 'desc')->first();
-                                ?>
+                                    $idInventory = DB::table('charlie_inventory')->where('numero_gateway',$hc[3])->orderBy('time', 'desc')->first();
+                                    ?>
                                 <td {{ $columns[$j]['style'] or ''}}>
                                     @if($idInventory)
                                         <?php $starth=$h = substr($h,0,-6); $endh=substr($h,-6); ?>
