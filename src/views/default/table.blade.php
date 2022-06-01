@@ -99,7 +99,7 @@
                 echo "</th>";
             }
             ?>
-            {{ $morceau }}
+            {{-- {{ $morceau }} --}}
 
             @if($button_table_action)
                 @if(CRUDBooster::isUpdate() || CRUDBooster::isDelete() || CRUDBooster::isRead())
@@ -157,7 +157,7 @@
                                     ?>
                                 <td {{ $columns[$j]['style'] or ''}}>
                                     @if($idInventory)
-                                        <?php $starth=$h = substr($h,0,-6); $endh=substr($h,-6); ?>
+                                        <?php $starth= substr($h,0,-6); $endh=substr($h,-6); ?>
                                         {!! $starth !!}
                                         <a href="{{ URL::to('admin/moredetails?id=' . $idInventory->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-map-marker"></i></a> 
                                         {!! $endh !!}
@@ -172,7 +172,6 @@
 
                             <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
                         @endif
-
 
                     @endforeach
                 </tr>
