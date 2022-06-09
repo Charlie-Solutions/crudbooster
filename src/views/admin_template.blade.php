@@ -7,7 +7,7 @@
         $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
         // on découpe le titre
         // we cut the title and get the rest
-        $morceau = substr($titleofpageComple,9);
+        $morceau = substr($titleofpageComple,19);
         // get the filiale number
         $filiale_number = substr($titleofpageComple,55);
     ?>
@@ -220,6 +220,17 @@
                     @if($morceau == "Zone de stockage")
                         <a type="submit" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#gpsConfigModal">Config GPS</a>
                     @endif
+
+                    @if($morceau == "Suivi matériels filiale 1")
+                        <?php
+                            if($morceau == "Suivi matériels filiale 1"){
+                                $id = "rapport_".$i;
+                            }
+                        ?>
+                        @if(CRUDBooster::myPrivilegeId() == 1 || CRUDBooster::myPrivilegeId() == 2)
+                            <a type="submit" class="btn btn-sm btn-primary" href='{{ url('report-form/'.$id) }}'>Générer un rapport</a>
+                        @endif
+              		@endif
 
                 <!--ADD ACTIon-->
                     @if(!empty($index_button))
