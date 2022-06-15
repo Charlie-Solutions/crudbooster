@@ -7,7 +7,10 @@
         $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
         // on découpe le titre
         // we cut the title and get the rest
-        $morceau = substr($titleofpageComple,19);
+        
+        $morceau = trim(substr($titleofpageComple,19));
+        //$morceau = substr($titleofpageComple,19);
+        
         // get the filiale number
         $filiale_number = substr($titleofpageComple,55);
     ?>
@@ -217,7 +220,8 @@
                         </a>
                     @endif
                     {{-- Button to show the Config GPS Modal --}}
-                    @if($morceau == "Zone de stockage")
+                    {{-- check if we have the privileges (not "Lecture") --}}
+                    @if($morceau == "Zone de stockage" && CRUDBooster::myPrivilegeId()!=4)
                         <a type="submit" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#gpsConfigModal">Config GPS</a>
                     @endif
 

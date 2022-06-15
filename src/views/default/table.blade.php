@@ -44,7 +44,14 @@
         });
     </script>
 @endpush
-
+<?php 
+    $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
+    // on découpe le titre
+    // we cut the title and get the rest
+    $morceau = substr($titleofpageComple,19);
+    // get the filiale number
+    $filiale_number = substr($titleofpageComple,55);
+?>
 <form id='form-table' method='post' action='{{CRUDBooster::mainpath("action-selected")}}'>
     <input type='hidden' name='button_name' value=''/>
     <input type='hidden' name='_token' value='{{csrf_token()}}'/>
@@ -92,10 +99,13 @@
                 echo "</th>";
             }
             ?>
+            {{-- {{ $morceau }} --}}
 
             @if($button_table_action)
                 @if(CRUDBooster::isUpdate() || CRUDBooster::isDelete() || CRUDBooster::isRead())
+
                     <th width='{{ isset($button_action_width)? $button_action_width :"auto"}}' style="text-align:right">{{cbLang("action_label")}}</th>
+                    
                 @endif
             @endif
         </tr>
@@ -138,9 +148,31 @@
             @else
                 <tr>
                     @endif
-
+                    
                     @foreach($hc as $j=>$h)
-                        <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
+                        @if($morceau == "Zone de stockage")
+                            @if($j == 8)
+                                <?php 
+                                    $idInventory = DB::table('charlie_inventory')->where('numero_gateway',$hc[3])->orderBy('time', 'desc')->first();
+                                    ?>
+                                <td {{ $columns[$j]['style'] or ''}}>
+                                    @if($idInventory)
+                                        <?php $starth= substr($h,0,-6); $endh=substr($h,-6); ?>
+                                        {!! $starth !!}
+                                        <a href="{{ URL::to('admin/moredetails?id=' . $idInventory->id) }}" class="btn btn-xs btn-warning"><i class="fa fa-map-marker"></i></a> 
+                                        {!! $endh !!}
+                                    @else
+                                        {!! $h !!}
+                                    @endif
+                                </td>
+                            @else
+                                <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
+                            @endif
+                        @else
+
+                            <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
+                        @endif
+
                     @endforeach
                 </tr>
                 @endforeach
@@ -170,6 +202,7 @@
             @if($button_table_action)
                 @if(CRUDBooster::isUpdate() || CRUDBooster::isDelete() || CRUDBooster::isRead())
                     <th> -</th>
+                    
                 @endif
             @endif
         </tr>
@@ -177,6 +210,7 @@
     </table>
 
 </form><!--END FORM TABLE-->
+    
 
 {{-- <div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
 <?php

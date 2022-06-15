@@ -172,15 +172,15 @@ $name = str_slug($form['label'], '');
 
                                                             // Grab the files and set them to our variable
                                                             function prepareUpload{{$name_column}}(event) {
-                                                                var max_size = {{ ($col['max'])?:2000 }};
+                                                                // var max_size = {{ ($col['max'])?:2000 }};
                                                                 file = event.target.files[0];
 
                                                                 var filesize = Math.round(parseInt(file.size) / 1024);
 
-                                                                if (filesize > max_size) {
-                                                                    sweetAlert('{{cbLang("alert_warning")}}', '{{cbLang("your_file_size_is_too_big")}}', 'warning');
-                                                                    return false;
-                                                                }
+                                                                // if (filesize > max_size) {
+                                                                //     sweetAlert('{{cbLang("alert_warning")}}', '{{cbLang("your_file_size_is_too_big")}}', 'warning');
+                                                                //     return false;
+                                                                // }
 
                                                                 filename = $('#fake-upload-{{$name_column}}').val().replace(/C:\\fakepath\\/i, '');
                                                                 var extension = filename.split('.').pop().toLowerCase();
