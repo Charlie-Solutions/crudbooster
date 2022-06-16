@@ -173,7 +173,7 @@
                                 <td {{ $columns[$j]['style'] or ''}}>
                                         <?php $starth=$h = substr($h,0,-6); $endh=substr($h,-6); ?>
                                         {!! $starth !!}
-                                        <a href="#" class="btn btn-xs btn-warning"><i class="fa fa-map-marker"></i></a> 
+                                        <a href="{{ URL::to('admin/get_link/'.$hc[2]) }}" class="btn btn-xs btn-warning"><i class="fa fa-map-marker"></i></a> 
                                         {!! $endh !!}
                                 </td>
                             @else
