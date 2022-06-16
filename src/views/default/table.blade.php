@@ -168,11 +168,21 @@
                             @else
                                 <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
                             @endif
+                        @elseif($morceau=="Suivi matériels filiale 1")
+                            @if($j == 11)
+                                <td {{ $columns[$j]['style'] or ''}}>
+                                        <?php $starth=$h = substr($h,0,-6); $endh=substr($h,-6); ?>
+                                        {!! $starth !!}
+                                        <a href="{{ URL::to('admin/get_link/'.$hc[2]) }}" class="btn btn-xs btn-warning"><i class="fa fa-map-marker"></i></a> 
+                                        {!! $endh !!}
+                                </td>
+                            @else
+                                <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
+                            @endif
                         @else
-
                             <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
                         @endif
-
+                        
                     @endforeach
                 </tr>
                 @endforeach
