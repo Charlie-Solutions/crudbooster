@@ -48,7 +48,7 @@
     $titleofpageComple = ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area"; 
     // on découpe le titre
     // we cut the title and get the rest
-    $morceau = substr($titleofpageComple,19);
+    $morceau = substr($titleofpageComple,9);
     // get the filiale number
     $filiale_number = substr($titleofpageComple,55);
 ?>
@@ -151,7 +151,7 @@
                     
                     @foreach($hc as $j=>$h)
                         @if($morceau == "Zone de stockage")
-                            @if($j == 8)
+                            @if($j == 7)
                                 <?php 
                                     $idInventory = DB::table('charlie_inventory')->where('numero_gateway',$hc[3])->orderBy('time', 'desc')->first();
                                     ?>
@@ -169,7 +169,7 @@
                                 <td {{ $columns[$j]['style'] or ''}}>{!! $h !!}</td>
                             @endif
                         @elseif($morceau=="Suivi matériels filiale 1")
-                            @if($j == 11)
+                            @if($j == 10)
                                 <td {{ $columns[$j]['style'] or ''}}>
                                         <?php $starth=$h = substr($h,0,-6); $endh=substr($h,-6); ?>
                                         {!! $starth !!}
