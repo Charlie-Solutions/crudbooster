@@ -14,13 +14,14 @@ class NotificationsController extends CBController
         $this->title_field = "content";
         $this->limit = 20;
         $this->index_orderby = ["id" => "desc"];
-        $this->button_show = true;
+        $this->button_show = false;
         $this->button_add = false;
         $this->button_edit = false;
         $this->button_detail = false;
         $this->button_delete = true;
         $this->button_export = false;
         $this->button_import = false;
+        $this->button_filter = false;
         $this->global_privilege = true;
 
         $read_notification_url = url(config('crudbooster.ADMIN_PATH')).'/notifications/read';
@@ -45,6 +46,40 @@ class NotificationsController extends CBController
         $this->button_selected = array();
         $this->button_selected[] = ['label'=>'Supprimer la sélection','icon'=>'fa fa-trash','name'=>'set_delete'];
         $this->button_selected[] = ['label'=>'Marquer comme lu','icon'=>'fa fa-arrow-right','name'=>'set_lu'];
+
+        $this->script_js = "
+        /* Disable autocompletion */
+        $('form').attr('autocomplete','off');
+        $(document).ready(function() {
+            $('div.table-responsive').removeClass('no-padding');
+            $('.down').click(function() {
+                $('html, body').animate({
+                    scrollTop: $('.up').offset().top
+                }, 1500);
+            });
+        });
+        /* Pagination managing */
+        $(document).ready(function() {
+            $('.up').click(function() {
+                $('html, body').animate({
+                    scrollTop: $('.down').offset().top
+                }, 1000);
+            });
+        });
+        /* For redirect a page when the result display a void page */
+        $.urlParam = function(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            return results[1] || 0;
+        };
+        let actuallyPage = $.urlParam('page');
+        actuallyPage = parseInt(actuallyPage, 10);
+        let lastPage = $('.pagination').find('li').eq(-2).children()[0].outerText;
+        lastPage = parseInt(lastPage, 10);
+        if (actuallyPage > lastPage){
+            let url = window.location.href.replace('page=' + actuallyPage,'page=' + lastPage);
+            document.location.href = url;
+        }
+    ";
     }
 
     /*
