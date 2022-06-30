@@ -86,7 +86,7 @@ class CRUDBooster
             // } else {
             //     $filename = str_slug($filename, '_').'.'.$ext;
             // }
-            $filename = str_slug($filename, '_').'_'.date('Y_m_d_H_m_s');
+            $filename = str_slug($filename, '_').'_'.date('Y_m_d').'.'.$ext;
 
             if (Storage::putFileAs($file_path, $file, $filename)) {
                 self::resizeImage($file_path.'/'.$filename, $resize_width, $resize_height);
